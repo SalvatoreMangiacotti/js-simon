@@ -22,12 +22,15 @@ const createListELements = (maxListElements, max) => {
 
         // Mostro come testo il numero random generato da Math.random()
 
-        li.innerHTML = Math.floor(Math.random() * max + 1);
+        const randomNumber = Math.floor(Math.random() * max + 1);
 
-        randomNumbersArray.push(li);
+        // Pusho nell'array vuoto i numeri random generati
+
+        li.innerHTML = randomNumber;
 
         // Inserisco all'interno della lista gli elementi li
 
+        randomNumbersArray.push(randomNumber);
         formRandomNumbers.appendChild(li);
 
     }
@@ -84,8 +87,7 @@ const countDown = setInterval(() => {
 
         for (let i = 0; i < randomNumbersArray.length; i++) {
 
-            randomNumbersArray[i].style.display = "none";
-
+            formRandomNumbers.children[i].style.display = "none";
         }
 
     } else {
@@ -102,4 +104,63 @@ const countDown = setInterval(() => {
 
 }, 1000); // 1000 (1 secondo)
 
+
+
+const userInput = document.querySelectorAll('.form-control');
+const confirmButton = document.querySelector('.btn');
+const winLoseMessage = document.getElementById('message');
+
+// Creo un array vuoto per poterci inserire i valori di input utente
+
+let arrayVuoto = [];
+
+confirmButton.addEventListener('click', (e) => {
+
+    e.preventDefault();
+
+    // Azzero l'array
+
+    let arrayVuoto = [];
+
+    // Contatore di risposte corrette
+
+    let correctAnswerCounter = 0;
+
+    // Pusho i valori inseriti dall'utente come valori numerici
+
+    for (let i = 0; i < userInput.length; i++) {
+
+        arrayVuoto.push(parseInt(userInput[i].value));
+
+    }
+
+    // Ciclo sugli sull'array vuoto per confrontare i suoi valori con quelli
+    // dell'array dei numeri random
+
+    for (let i = 0; i < arrayVuoto.length; i++) {
+
+        let input = arrayVuoto[i];
+
+        if (randomNumbersArray.includes(input)) {
+
+            // Il contatore aumenta ad ogni numero indovinato
+
+            correctAnswerCounter++;
+            winLoseMessage.textContent = "Complimenti hai indovinato!";
+
+        } else {
+
+            winLoseMessage.textContent = "Sbagliato! Aggiorna la pagina per ritentare";
+
+        }
+    }
+
+    // Creo un elemento p e lo mostro in pagina sotto il messaggio di vittoria/sconfitta
+    
+    const p = document.createElement('p');
+    let correctAnswer = `Hai indovinato ${correctAnswerCounter} numeri!`;
+    p.innerHTML = correctAnswer;
+    winLoseMessage.appendChild(p);
+
+});
 
